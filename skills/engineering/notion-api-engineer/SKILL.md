@@ -17,7 +17,7 @@ Make raw Notion API calls correct, resumable and safe: right endpoint, right ver
 ## Required tools
 - `ntn` (0.23.28 tested): `ntn api <path> [-X METHOD] [-d JSON] [key==value]`, `ntn api ls`, `ntn api <path> --help|--docs|--spec`. Label: API-supported.
 - `python3` (stdlib only) for `scripts/notion_request.py`. Label: external.
-- Official CLI skill for syntax reference: `/Users/gregoriuswillson/embedded/.claude/skills/notion-cli/SKILL.md` (do not duplicate it).
+- Official CLI skill for syntax reference: `~/.claude/skills/notion-cli/SKILL.md` (do not duplicate it).
 
 ## Dependencies
 - Limits and retry policy: [api-limits](../../../references/api-limits.md). This skill implements them; it never restates the numbers beyond what a rule needs.

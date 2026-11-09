@@ -6,7 +6,7 @@ description: Runs Notion terminal workflows with the official `ntn` CLI: search,
 # Notion CLI Engineer
 
 ## Purpose
-Perform Notion operations from the terminal with the correct `ntn` command form, safe defaults and verification. Routes each operation to `ntn`, to the API, or elsewhere. Builds on the official skill `/Users/gregoriuswillson/embedded/.claude/skills/notion-cli/SKILL.md` (reference it, do not duplicate it).
+Perform Notion operations from the terminal with the correct `ntn` command form, safe defaults and verification. Routes each operation to `ntn`, to the API, or elsewhere. Builds on the official skill `~/.claude/skills/notion-cli/SKILL.md` (reference it, do not duplicate it).
 
 ## Activation triggers
 - "use ntn", "Notion CLI", "ntn pages create", "export this page to Markdown", "import Markdown".

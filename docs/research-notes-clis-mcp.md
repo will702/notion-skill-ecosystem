@@ -1,7 +1,7 @@
 # Notion CLI and MCP research notes
 
 Date of research: 2026-11-09. Read-only. Nothing was installed or executed from the cloned repos.
-Clones (depth 1) live under `/private/tmp/claude-501/-Users-gregoriuswillson-embedded/ebeaf7e8-f033-4bea-a37e-41f49889524c/scratchpad/research/clones/`.
+Clones (depth 1) live under `<scratch-dir>`.
 
 ## Scored table (1 = poor, 5 = excellent)
 
