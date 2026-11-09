@@ -1,0 +1,12 @@
+{
+  "object": "data_source",
+  "id": "<NEW_DATA_SOURCE_ID>",
+  "properties": {
+    "Name": {"id": "title", "type": "title", "title": {}},
+    "Status": {"id": "e1", "type": "status", "status": {"options": [
+      {"name": "Todo"}, {"name": "Done"}]}},
+    "Priority": {"id": "f2", "type": "multi_select", "multi_select": {"options": [
+      {"name": "High"}, {"name": "Low"}]}},
+    "Due": {"id": "g3", "type": "date", "date": {}}
+  }
+}

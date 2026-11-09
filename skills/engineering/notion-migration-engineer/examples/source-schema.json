@@ -1,0 +1,13 @@
+{
+  "object": "data_source",
+  "id": "<OLD_DATA_SOURCE_ID>",
+  "properties": {
+    "Name": {"id": "title", "type": "title", "title": {}},
+    "Status": {"id": "a1", "type": "status", "status": {"options": [
+      {"name": "Todo"}, {"name": "In Progress"}, {"name": "Done"}]}},
+    "Priority": {"id": "b2", "type": "select", "select": {"options": [
+      {"name": "High"}, {"name": "Low"}]}},
+    "Due Date": {"id": "c3", "type": "date", "date": {}},
+    "Project": {"id": "d4", "type": "relation", "relation": {"data_source_id": "<PROJECTS_DS_ID>"}}
+  }
+}

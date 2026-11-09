@@ -1,0 +1,35 @@
+{
+  "title": "Notes",
+  "_comment": "Master database. Create Areas and Sources first, then substitute their data source IDs into the relation properties (see README.md).",
+  "properties": {
+    "Name": {"title": {}},
+    "Status": {"select": {"options": [{"name": "Inbox", "color": "gray"}, {"name": "Active", "color": "blue"}, {"name": "Evergreen", "color": "green"}, {"name": "Archived", "color": "default"}]}},
+    "Type": {"select": {"options": [{"name": "Idea", "color": "default"}, {"name": "Reference", "color": "default"}, {"name": "Meeting", "color": "default"}, {"name": "Summary", "color": "default"}]}},
+    "Area": {"relation": {"data_source_id": "<AREAS_DATA_SOURCE_ID>", "dual_property": {}}, "_note": "Relation to Areas; the auto-created reverse property on Areas is named \"Related to Notes (Area)\"; rename if wanted. Relation property creation is Tested; writing relation values is Docs only."},
+    "Source": {"relation": {"data_source_id": "<SOURCES_DATA_SOURCE_ID>", "dual_property": {}}, "_note": "Relation to Sources; reverse property is named Notes on Sources."},
+    "Related Note": {"relation": {"data_source_id": "<NOTES_DATA_SOURCE_ID>", "single_property": {}}, "_note": "Self-relation, added in a second PATCH after the Notes data source exists."},
+    "Last Edited": {"last_edited_time": {}},
+    "Created": {"created_time": {}}
+  },
+  "areas_database": {
+    "title": "Areas",
+    "properties": {"Name": {"title": {}}, "Description": {"rich_text": {}}}
+  },
+  "sources_database": {
+    "title": "Sources",
+    "properties": {"Name": {"title": {}}, "URL": {"url": {}}, "Kind": {"select": {"options": [{"name": "Article"}, {"name": "Book"}, {"name": "Meeting"}, {"name": "Link"}]}}}
+  },
+  "views": [
+    {"name": "All", "type": "table", "sorts": [{"property": "Last Edited", "direction": "descending"}]},
+    {"name": "Inbox", "type": "table", "filter": {"property": "Status", "select": {"equals": "Inbox"}}},
+    {"name": "By Status", "type": "board", "configuration": {"group_by": {"type": "select", "property_id": "<STATUS_PROPERTY_ID>", "sort": {"type": "manual"}}}},
+    {"name": "By Area", "type": "table", "_note": "Group by Area in the UI if the views API rejects relation grouping (not tested)."}
+  ],
+  "formulas": {
+    "Freshness": "ifs(dateBetween(now(), prop(\"Last Edited\"), \"days\") > 90 and prop(\"Status\") != \"Archived\", \"Stale\", \"Current\")"
+  },
+  "seed_rows": [
+    {"Name": "Welcome to the Knowledge Base", "Status": "Active", "Type": "Reference"},
+    {"Name": "Example Inbox Note", "Status": "Inbox", "Type": "Idea"}
+  ]
+}

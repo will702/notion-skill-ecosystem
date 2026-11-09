@@ -1,0 +1,107 @@
+{
+  "title": "Tasks",
+  "properties": {
+    "Name": {
+      "title": {}
+    },
+    "Status": {
+      "select": {
+        "options": [
+          {
+            "name": "Todo"
+          },
+          {
+            "name": "In Progress"
+          },
+          {
+            "name": "Done"
+          }
+        ]
+      }
+    },
+    "Priority": {
+      "select": {
+        "options": [
+          {
+            "name": "Low"
+          },
+          {
+            "name": "Medium"
+          },
+          {
+            "name": "High"
+          }
+        ]
+      }
+    },
+    "Due Date": {
+      "date": {}
+    },
+    "Is Archived": {
+      "checkbox": {}
+    }
+  },
+  "views": [
+    {
+      "name": "By Status",
+      "type": "board",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": "Status"
+    },
+    {
+      "name": "Due This Week",
+      "type": "table",
+      "filter": {
+        "property": "Due Date",
+        "date": {
+          "this_week": {}
+        }
+      },
+      "sorts": [
+        {
+          "property": "Due Date",
+          "direction": "ascending"
+        }
+      ],
+      "group_by_property": null
+    },
+    {
+      "name": "Calendar",
+      "type": "calendar",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": null,
+      "date_property": "Due Date"
+    },
+    {
+      "name": "All",
+      "type": "table",
+      "filter": null,
+      "sorts": [
+        {
+          "property": "Name",
+          "direction": "ascending"
+        }
+      ],
+      "group_by_property": null
+    }
+  ],
+  "formulas": {
+    "Urgency": "ifs(empty(prop(\"Due Date\")), \"No date\", dateBetween(prop(\"Due Date\"), now(), \"days\") < 0 and prop(\"Status\") != \"Done\", \"Overdue\", dateBetween(prop(\"Due Date\"), now(), \"days\") == 0 and prop(\"Status\") != \"Done\", \"Due today\", \"On track\")"
+  },
+  "seed_rows": [
+    {
+      "Name": "Plan the week",
+      "Status": "Todo",
+      "Priority": "High",
+      "Due Date": "2026-11-10"
+    },
+    {
+      "Name": "Inbox review",
+      "Status": "In Progress",
+      "Priority": "Medium",
+      "Due Date": "2026-11-12"
+    }
+  ]
+}

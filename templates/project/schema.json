@@ -1,0 +1,341 @@
+{
+  "title": "Projects",
+  "properties": {
+    "Projects": {
+      "Name": {
+        "title": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Not Started"
+            },
+            {
+              "name": "In Progress"
+            },
+            {
+              "name": "Blocked"
+            },
+            {
+              "name": "Done"
+            }
+          ]
+        }
+      },
+      "Owner": {
+        "people": {}
+      },
+      "Start Date": {
+        "date": {}
+      },
+      "Due Date": {
+        "date": {}
+      },
+      "Tasks": {
+        "relation": {
+          "data_source_id": "{{TASKS_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      },
+      "Total": {
+        "rollup": {
+          "relation_property_name": "Tasks",
+          "rollup_property_name": "Name",
+          "function": "count"
+        }
+      },
+      "Completed": {
+        "rollup": {
+          "relation_property_name": "Tasks",
+          "rollup_property_name": "Is Done",
+          "function": "checked"
+        }
+      }
+    },
+    "Tasks": {
+      "Name": {
+        "title": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Not Started"
+            },
+            {
+              "name": "In Progress"
+            },
+            {
+              "name": "Blocked"
+            },
+            {
+              "name": "Done"
+            }
+          ]
+        }
+      },
+      "Assignee": {
+        "people": {}
+      },
+      "Due Date": {
+        "date": {}
+      },
+      "Is Done": {
+        "checkbox": {}
+      },
+      "Blocked By": {
+        "relation": {
+          "data_source_id": "{{TASKS_DS_ID}}",
+          "type": "single_property",
+          "single_property": {}
+        }
+      },
+      "Milestone": {
+        "relation": {
+          "data_source_id": "{{MILESTONES_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      }
+    },
+    "Milestones": {
+      "Name": {
+        "title": {}
+      },
+      "Project": {
+        "relation": {
+          "data_source_id": "{{PROJECTS_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      },
+      "Target Date": {
+        "date": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Upcoming"
+            },
+            {
+              "name": "Reached"
+            },
+            {
+              "name": "Missed"
+            }
+          ]
+        }
+      }
+    },
+    "Risks": {
+      "Name": {
+        "title": {}
+      },
+      "Project": {
+        "relation": {
+          "data_source_id": "{{PROJECTS_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      },
+      "Severity": {
+        "select": {
+          "options": [
+            {
+              "name": "Low"
+            },
+            {
+              "name": "Medium"
+            },
+            {
+              "name": "High"
+            }
+          ]
+        }
+      },
+      "Likelihood": {
+        "select": {
+          "options": [
+            {
+              "name": "Low"
+            },
+            {
+              "name": "Medium"
+            },
+            {
+              "name": "High"
+            }
+          ]
+        }
+      },
+      "Mitigation": {
+        "rich_text": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Open"
+            },
+            {
+              "name": "Mitigated"
+            },
+            {
+              "name": "Accepted"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "views": [
+    {
+      "database": "Projects",
+      "name": "All",
+      "type": "table",
+      "filter": null,
+      "sorts": [
+        {
+          "property": "Due Date",
+          "direction": "ascending"
+        }
+      ],
+      "group_by_property": null
+    },
+    {
+      "database": "Projects",
+      "name": "By Status",
+      "type": "board",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": "Status"
+    },
+    {
+      "database": "Tasks",
+      "name": "Open",
+      "type": "table",
+      "filter": {
+        "property": "Status",
+        "select": {
+          "does_not_equal": "Done"
+        }
+      },
+      "sorts": [
+        {
+          "property": "Due Date",
+          "direction": "ascending"
+        }
+      ],
+      "group_by_property": null
+    },
+    {
+      "database": "Tasks",
+      "name": "By Status",
+      "type": "board",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": "Status"
+    },
+    {
+      "database": "Tasks",
+      "name": "Calendar",
+      "type": "calendar",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": null
+    },
+    {
+      "database": "Risks",
+      "name": "Open",
+      "type": "table",
+      "filter": {
+        "property": "Status",
+        "select": {
+          "equals": "Open"
+        }
+      },
+      "sorts": [
+        {
+          "property": "Severity",
+          "direction": "descending"
+        }
+      ],
+      "group_by_property": null
+    },
+    {
+      "database": "Milestones",
+      "name": "All",
+      "type": "table",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": null
+    }
+  ],
+  "formulas": [
+    {
+      "database": "Projects",
+      "property": "Progress",
+      "expression": "if(prop(\"Total\") == 0, \"No items\", let(pct, prop(\"Completed\") / prop(\"Total\"),\n  repeat(\"█\", round(pct * 10)) + repeat(\"░\", 10 - round(pct * 10)) + \" \" + format(round(pct * 100)) + \"%\"))"
+    },
+    {
+      "database": "Projects",
+      "property": "Urgency",
+      "expression": "ifs(\n  empty(prop(\"Due Date\")), \"No date\",\n  dateBetween(prop(\"Due Date\"), now(), \"days\") < 0 and prop(\"Status\") != \"Done\", \"Overdue\",\n  dateBetween(prop(\"Due Date\"), now(), \"days\") == 0 and prop(\"Status\") != \"Done\", \"Due today\",\n  \"On track\")"
+    }
+  ],
+  "seed_rows": [
+    {
+      "database": "Projects",
+      "properties": {
+        "Name": {
+          "title": [
+            {
+              "text": {
+                "content": "{{PROJECT_NAME}}"
+              }
+            }
+          ]
+        },
+        "Status": {
+          "select": {
+            "name": "Not Started"
+          }
+        },
+        "Due Date": {
+          "date": {
+            "start": "{{DUE_DATE}}"
+          }
+        }
+      }
+    },
+    {
+      "database": "Tasks",
+      "properties": {
+        "Name": {
+          "title": [
+            {
+              "text": {
+                "content": "{{TASK_NAME}}"
+              }
+            }
+          ]
+        },
+        "Status": {
+          "select": {
+            "name": "Not Started"
+          }
+        },
+        "Related to Projects (Tasks)": {
+          "relation": [
+            {
+              "id": "{{PROJECT_PAGE_ID}}"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

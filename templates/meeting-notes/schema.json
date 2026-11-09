@@ -1,0 +1,195 @@
+{
+  "title": "Meetings",
+  "properties": {
+    "Meetings": {
+      "Name": {
+        "title": {}
+      },
+      "Date": {
+        "date": {}
+      },
+      "Attendees": {
+        "people": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Planned"
+            },
+            {
+              "name": "Held"
+            },
+            {
+              "name": "Cancelled"
+            }
+          ]
+        }
+      },
+      "Project": {
+        "relation": {
+          "data_source_id": "{{PROJECTS_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      },
+      "Summary": {
+        "rich_text": {}
+      }
+    },
+    "Action Items": {
+      "Name": {
+        "title": {}
+      },
+      "Meeting": {
+        "relation": {
+          "data_source_id": "{{MEETINGS_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      },
+      "Owner": {
+        "people": {}
+      },
+      "Due Date": {
+        "date": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Todo"
+            },
+            {
+              "name": "In Progress"
+            },
+            {
+              "name": "Done"
+            }
+          ]
+        }
+      },
+      "Dedupe Key": {
+        "rich_text": {}
+      }
+    }
+  },
+  "views": [
+    {
+      "database": "Meetings",
+      "name": "All",
+      "type": "table",
+      "filter": null,
+      "sorts": [
+        {
+          "property": "Date",
+          "direction": "descending"
+        }
+      ],
+      "group_by_property": null
+    },
+    {
+      "database": "Meetings",
+      "name": "Calendar",
+      "type": "calendar",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": null
+    },
+    {
+      "database": "Meetings",
+      "name": "By Status",
+      "type": "board",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": "Status"
+    },
+    {
+      "database": "Action Items",
+      "name": "Open",
+      "type": "table",
+      "filter": {
+        "property": "Status",
+        "select": {
+          "does_not_equal": "Done"
+        }
+      },
+      "sorts": [
+        {
+          "property": "Due Date",
+          "direction": "ascending"
+        }
+      ],
+      "group_by_property": null
+    },
+    {
+      "database": "Action Items",
+      "name": "By Status",
+      "type": "board",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": "Status"
+    }
+  ],
+  "formulas": [
+    {
+      "database": "Action Items",
+      "property": "Urgency",
+      "expression": "ifs(\n  empty(prop(\"Due Date\")), \"No date\",\n  dateBetween(prop(\"Due Date\"), now(), \"days\") < 0 and prop(\"Status\") != \"Done\", \"Overdue\",\n  dateBetween(prop(\"Due Date\"), now(), \"days\") == 0 and prop(\"Status\") != \"Done\", \"Due today\",\n  \"On track\")"
+    }
+  ],
+  "seed_rows": [
+    {
+      "database": "Meetings",
+      "properties": {
+        "Name": {
+          "title": [
+            {
+              "text": {
+                "content": "{{DATE}} {{TOPIC}}"
+              }
+            }
+          ]
+        },
+        "Date": {
+          "date": {
+            "start": "{{DATE}}"
+          }
+        },
+        "Status": {
+          "select": {
+            "name": "Planned"
+          }
+        }
+      }
+    },
+    {
+      "database": "Action Items",
+      "properties": {
+        "Name": {
+          "title": [
+            {
+              "text": {
+                "content": "{{ACTION_TEXT}}"
+              }
+            }
+          ]
+        },
+        "Status": {
+          "select": {
+            "name": "Todo"
+          }
+        },
+        "Dedupe Key": {
+          "rich_text": [
+            {
+              "text": {
+                "content": "{{DATE}}-{{ACTION_SLUG}}"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

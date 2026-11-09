@@ -1,0 +1,122 @@
+{
+  "title": "Projects",
+  "properties": {
+    "Name": {
+      "title": {}
+    },
+    "Status": {
+      "select": {
+        "options": [
+          {
+            "name": "Todo"
+          },
+          {
+            "name": "In Progress"
+          },
+          {
+            "name": "Done"
+          }
+        ]
+      }
+    },
+    "Priority": {
+      "select": {
+        "options": [
+          {
+            "name": "Low"
+          },
+          {
+            "name": "Medium"
+          },
+          {
+            "name": "High"
+          }
+        ]
+      }
+    },
+    "Owner": {
+      "people": {}
+    },
+    "Due Date": {
+      "date": {}
+    },
+    "Completed": {
+      "number": {
+        "format": "number"
+      }
+    },
+    "Total": {
+      "number": {
+        "format": "number"
+      }
+    }
+  },
+  "views": [
+    {
+      "name": "By Status",
+      "type": "board",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": "Status"
+    },
+    {
+      "name": "Due This Week",
+      "type": "table",
+      "filter": {
+        "property": "Due Date",
+        "date": {
+          "this_week": {}
+        }
+      },
+      "sorts": [
+        {
+          "property": "Due Date",
+          "direction": "ascending"
+        }
+      ],
+      "group_by_property": null
+    },
+    {
+      "name": "Calendar",
+      "type": "calendar",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": null,
+      "date_property": "Due Date"
+    },
+    {
+      "name": "All",
+      "type": "table",
+      "filter": null,
+      "sorts": [
+        {
+          "property": "Name",
+          "direction": "ascending"
+        }
+      ],
+      "group_by_property": null
+    }
+  ],
+  "formulas": {
+    "Progress": "if(prop(\"Total\") == 0, \"No items\", let(pct, prop(\"Completed\") / prop(\"Total\"), repeat(\"█\", round(pct * 10)) + repeat(\"░\", 10 - round(pct * 10)) + \" \" + format(round(pct * 100)) + \"%\"))",
+    "Urgency": "ifs(empty(prop(\"Due Date\")), \"No date\", dateBetween(prop(\"Due Date\"), now(), \"days\") < 0 and prop(\"Status\") != \"Done\", \"Overdue\", dateBetween(prop(\"Due Date\"), now(), \"days\") == 0 and prop(\"Status\") != \"Done\", \"Due today\", \"On track\")"
+  },
+  "seed_rows": [
+    {
+      "Name": "Website Relaunch",
+      "Status": "In Progress",
+      "Priority": "High",
+      "Due Date": "2026-12-15",
+      "Completed": 3,
+      "Total": 8
+    },
+    {
+      "Name": "Onboarding Guide",
+      "Status": "Todo",
+      "Priority": "Medium",
+      "Due Date": "2026-12-01",
+      "Completed": 0,
+      "Total": 5
+    }
+  ]
+}

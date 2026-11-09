@@ -1,0 +1,254 @@
+{
+  "title": "Sources",
+  "properties": {
+    "Sources": {
+      "Name": {
+        "title": {}
+      },
+      "Authors": {
+        "rich_text": {}
+      },
+      "Year": {
+        "number": {
+          "format": "number"
+        }
+      },
+      "DOI": {
+        "rich_text": {}
+      },
+      "URL": {
+        "url": {}
+      },
+      "Type": {
+        "select": {
+          "options": [
+            {
+              "name": "Paper"
+            },
+            {
+              "name": "Book"
+            },
+            {
+              "name": "Web"
+            },
+            {
+              "name": "Dataset"
+            }
+          ]
+        }
+      },
+      "Verification": {
+        "select": {
+          "options": [
+            {
+              "name": "Unverified"
+            },
+            {
+              "name": "Verified"
+            },
+            {
+              "name": "Disputed"
+            }
+          ]
+        }
+      },
+      "Citation": {
+        "rich_text": {}
+      }
+    },
+    "Notes": {
+      "Name": {
+        "title": {}
+      },
+      "Claim": {
+        "rich_text": {}
+      },
+      "Source": {
+        "relation": {
+          "data_source_id": "{{SOURCES_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      },
+      "Quote": {
+        "rich_text": {}
+      },
+      "Location": {
+        "rich_text": {}
+      },
+      "Hypothesis": {
+        "relation": {
+          "data_source_id": "{{HYPOTHESES_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      }
+    },
+    "Hypotheses": {
+      "Name": {
+        "title": {}
+      },
+      "Statement": {
+        "rich_text": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Proposed"
+            },
+            {
+              "name": "Testing"
+            },
+            {
+              "name": "Supported"
+            },
+            {
+              "name": "Refuted"
+            }
+          ]
+        }
+      }
+    },
+    "Experiments": {
+      "Name": {
+        "title": {}
+      },
+      "Hypothesis": {
+        "relation": {
+          "data_source_id": "{{HYPOTHESES_DS_ID}}",
+          "type": "dual_property",
+          "dual_property": {}
+        }
+      },
+      "Date": {
+        "date": {}
+      },
+      "Method": {
+        "rich_text": {}
+      },
+      "Result": {
+        "rich_text": {}
+      },
+      "Status": {
+        "select": {
+          "options": [
+            {
+              "name": "Planned"
+            },
+            {
+              "name": "Running"
+            },
+            {
+              "name": "Complete"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "views": [
+    {
+      "database": "Sources",
+      "name": "All",
+      "type": "table",
+      "filter": null,
+      "sorts": [
+        {
+          "property": "Year",
+          "direction": "descending"
+        }
+      ],
+      "group_by_property": null
+    },
+    {
+      "database": "Sources",
+      "name": "By Verification",
+      "type": "board",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": "Verification"
+    },
+    {
+      "database": "Notes",
+      "name": "Unsourced Claims",
+      "type": "table",
+      "filter": {
+        "property": "Source",
+        "relation": {
+          "is_empty": true
+        }
+      },
+      "sorts": [],
+      "group_by_property": null
+    },
+    {
+      "database": "Hypotheses",
+      "name": "By Status",
+      "type": "board",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": "Status"
+    },
+    {
+      "database": "Experiments",
+      "name": "Calendar",
+      "type": "calendar",
+      "filter": null,
+      "sorts": [],
+      "group_by_property": null
+    }
+  ],
+  "formulas": [
+    {
+      "database": "Sources",
+      "property": "Citation Check",
+      "expression": "if(empty(prop(\"Authors\")) or empty(prop(\"Year\")) or (empty(prop(\"DOI\")) and empty(prop(\"URL\"))), \"Incomplete\", \"Complete\")"
+    }
+  ],
+  "seed_rows": [
+    {
+      "database": "Sources",
+      "properties": {
+        "Name": {
+          "title": [
+            {
+              "text": {
+                "content": "{{SOURCE_TITLE}}"
+              }
+            }
+          ]
+        },
+        "URL": {
+          "url": "{{SOURCE_URL}}"
+        },
+        "Verification": {
+          "select": {
+            "name": "Unverified"
+          }
+        }
+      }
+    },
+    {
+      "database": "Notes",
+      "properties": {
+        "Name": {
+          "title": [
+            {
+              "text": {
+                "content": "{{CLAIM_SHORT}}"
+              }
+            }
+          ]
+        },
+        "Source": {
+          "relation": [
+            {
+              "id": "{{SOURCE_PAGE_ID}}"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
